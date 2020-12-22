@@ -1,6 +1,4 @@
 import Head from 'next/head'
-import styles from './layout.module.css'
-import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 
 const name = 'Nick Cox'
@@ -14,7 +12,7 @@ export default function Layout({
   home?: boolean
 }) {
   return (
-    <div className={styles.container}>
+    <div className='font-sans min-h-screen'>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
@@ -30,15 +28,19 @@ export default function Layout({
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <header className={styles.header}>
+      <header className='w-screen bg-gray-100 p-4'>
         {home ? (
           <>
             <img
               src="/images/profile.jpg"
-              className={`${styles.headerHomeImage} ${utilStyles.borderCircle}`}
+              className='rounded-full h-52 w-52 sm:h-80 sm:w-80 m-auto shadow-lg'
               alt={name}
             />
-            <h1 className={utilStyles.heading2Xl}>{name}</h1>
+            <h1 
+              className='font-sans text-xl font-bold text-center'
+            >
+                {name}
+              </h1>
           </>
         ) : (
           <>
@@ -46,22 +48,26 @@ export default function Layout({
               <a>
                 <img
                   src="/images/profile.jpg"
-                  className={`${styles.headerImage} ${utilStyles.borderCircle}`}
+                  className='rounded-full h-40 w-40 m-auto shadow-lg'
                   alt={name}
                 />
               </a>
             </Link>
-            <h2 className={utilStyles.headingLg}>
+            <h2 className='font-sans text-xl font-bold text-center'>
               <Link href="/">
-                <a className={utilStyles.colorInherit}>{name}</a>
+                <a 
+                  className=''
+                >
+                  {name}
+                </a>
               </Link>
             </h2>
           </>
         )}
       </header>
-      <main>{children}</main>
+      <main className="p-4" >{children}</main>
       {!home && (
-        <div className={styles.backToHome}>
+        <div className='text-blue-600 px-4'>
           <Link href="/">
             <a>← Back to home</a>
           </Link>
