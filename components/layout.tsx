@@ -24,7 +24,7 @@ export default function Layout({children, location} : LayoutPropTypes) {
         {children}
       </main>
       {location !== 'home' && (
-        <div className='text-purple-100 font-mono uppercase font-semibold rounded-r-lg bg-black py-2 px-4 absolute bottom-2 hover:text-purple-400'>
+        <div className='text-purple-100 font-mono uppercase font-semibold rounded-r-lg bg-black py-2 px-4 absolute bottom-2 transform transition-transform  hover:text-purple-400 hover:scale-105'>
           <Link href="/">
             <a>← Back to home</a>
           </Link>

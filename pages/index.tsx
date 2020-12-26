@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import { GetStaticProps } from 'next'
 import { getPageData } from '../lib/pages'
-import NavBar from '../components/navbar'
 
 export const getStaticProps: GetStaticProps = async () => {
   const pageProps = await getPageData('home-page')

@@ -1,13 +1,13 @@
 import { GetStaticProps } from 'next'
-import { getPageData } from '../lib/pages'
+import { getFeatured, getPageData } from '../lib/pages'
 import Layout from '../components/layout'
-import NavBar from '../components/navbar'
 import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
   const pageProps = await getPageData('blog-page')
+  const featuredBlogs = await getFeatured('blog')
   return {
-    props: {pageProps}
+    props: {pageProps, featuredBlogs}
   }
 }
 
@@ -17,7 +17,17 @@ interface pagePropTypes {
   contentHtml: any
 }
 
-export default function BlogPage({pageProps}: {pageProps: pagePropTypes}){
+interface featuredBlogTypes {
+  title: string
+  publish_date: string
+  description: string
+  author: string
+}
+
+export default function BlogPage(
+  {pageProps, featuredBlogs}: 
+  {pageProps: pagePropTypes, featuredBlogs: featuredBlogTypes[]}
+  ){
   return(
     <>
       <Head>
@@ -34,6 +44,9 @@ export default function BlogPage({pageProps}: {pageProps: pagePropTypes}){
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml }} 
         />
+        <ul>
+          {featuredBlogs.map((article, idx) => <li key={`article_${idx}`}>{`${article.title} by: ${article.author}`}</li>)}
+        </ul>
       </Layout>
     </>
   )
