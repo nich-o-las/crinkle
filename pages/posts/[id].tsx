@@ -1,18 +1,24 @@
 import Layout from '../../components/layout'
-import { getAllPostIds, getPostData } from '../../lib/posts'
+import {useEffect} from 'react'
+import { getAllPostSlugs, getPostDataFromSlug } from '../../lib/posts'
+// import Image from 'next/image'
 import Head from 'next/head'
 import Date from '../../components/date'
 import { GetStaticProps, GetStaticPaths } from 'next'
+import { getStrapiMedia } from '../../lib/media'
 
 export default function Post({
   postData
 }: {
   postData: {
     title: string
-    date: string
+    publish_date: string
     contentHtml: string
+    image?,
+    category: string
   }
 }) {
+
   return (
     <Layout>
       <Head>
@@ -24,10 +30,15 @@ export default function Post({
         >
           {postData.title}
         </h1>
+        {/* {console.log(postData.image)} */}
+        <img
+          src={getStrapiMedia(postData.image.url)}
+          alt={postData.image.alternativeText || 'a cute shot'}
+        />
         <div 
           className='text-sm font-semibold my-1 text-gray-400'
         >
-          <Date dateString={postData.date} />
+          <Date dateString={postData.publish_date} />
         </div>
         <div 
           className="unreset"
@@ -38,16 +49,16 @@ export default function Post({
   )
 }
 
-export async function getStaticPaths() {
-  const paths = getAllPostIds()
+export const getStaticPaths: GetStaticPaths = async() => {
+  const paths = await getAllPostSlugs()
   return {
     paths,
     fallback: false
   }
 }
 
-export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id)
+export const getStaticProps: GetStaticProps = async({ params }: any) => {
+  const postData = await getPostDataFromSlug(params.id)
   return {
     props: {
       postData

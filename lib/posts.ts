@@ -3,8 +3,11 @@ import path from 'path'
 import matter from 'gray-matter'
 import remark from 'remark'
 import html from 'remark-html'
+import { fetchQuery } from './utils'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
+
+const baseUrl: string = process.env.NEXT_PUBLIC_BASE_URL
 
 export function getSortedPostsData() {
   // Get file names under /posts
@@ -36,34 +39,53 @@ export function getSortedPostsData() {
   })
 }
 
-export function getAllPostIds() {
-  const fileNames = fs.readdirSync(postsDirectory)
-  return fileNames.map(fileName => {
+// export function getAllPostIds() {
+//   const fileNames = fs.readdirSync(postsDirectory)
+//   return fileNames.map(fileName => {
+//     return {
+//       params: {
+//         id: fileName.replace(/\.md$/, '')
+//       }
+//     }
+//   })
+// }
+
+export async function getAllPostSlugs() {
+  const posts = await fetchQuery(`posts`)
+  return posts.map(post => {
     return {
       params: {
-        id: fileName.replace(/\.md$/, '')
+        id: `${post.slug}`
       }
     }
   })
 }
 
-export async function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf8')
+export async function getPostDataFromSlug(slug: string){
+  const response = await fetch(`${baseUrl}/posts?slug=${slug}`)
+  const data: JSON = await response.json()
+  const processedContent = await remark()
+    .use(html)
+    .process(data[0].content)
+  const contentHtml = processedContent.toString()
+  const {title, publish_date, category, image} = data[0]
+  return {title, publish_date, category, image, contentHtml}
+}
 
-  // Use gray-matter to parse the post metadata section
-  const matterResult = matter(fileContents)
+
+export async function getPostData(slug: string) {
+  const result: JSON = await fetchQuery('posts', slug)
 
   // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
-    .process(matterResult.content)
+    .process(result[0].content)
   const contentHtml = processedContent.toString()
 
   // Combine the data with the id and contentHtml
   return {
-    id,
+    slug,
     contentHtml,
-    ...(matterResult.data as { date: string; title: string })
+    // ...(matterResult.data as { date: string; title: string })
   }
 }
