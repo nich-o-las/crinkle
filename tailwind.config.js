@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans' : ['Lato', 'sans-serif'],
-        'serif' : ['DM Serif Display' , 'serif'],
+        'serif' : ['Merriweather' , 'serif'],
         'mono' : ['DM Mono', 'mono'],
         'logo' : ['Rock Salt', 'sans']
       }

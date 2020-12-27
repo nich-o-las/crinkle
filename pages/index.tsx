@@ -25,7 +25,7 @@ export default function Home({pageProps}: {pageProps: PagePropTypes}){
           <meta name="description" content={pageProps.description}/>
           <meta name="og:title" content={pageProps.title} />
         </Head>
-        <h1>{pageProps.title}</h1>
+        <h1 className="font-bold font-serif text-3xl uppercase text-center">{pageProps.title}</h1>
         <div
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml}}

@@ -1,6 +1,8 @@
 import { GetStaticProps } from 'next'
-import { getPageData, getFeatured } from '../lib/pages'
-import Layout from '../components/layout'
+import { getPageData, getFeatured } from '../../lib/pages'
+import Link from 'next/link'
+import Layout from '../../components/layout'
+import Date from '../../components/date'
 import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -19,6 +21,7 @@ interface pagePropTypes {
 
 interface featuredArticleTypes {
   title: string
+  slug: string
   publish_date: string
   description: string
   author: string
@@ -43,13 +46,27 @@ export default function ArticlePage(
         <meta name="og:title" content={pageProps.title} />
       </Head>
       <Layout location='articles'>
-        <h1>{pageProps.title}</h1>
+        <h1 className="font-serif font-bold text-3xl uppercase text-center">{pageProps.title}</h1>
         <div 
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml }} 
         />
         <ul>
-          {featuredArticles.map((article, idx) => <li key={`article_${idx}`}>{`${article.title} by: ${article.author}`}</li>)}
+          {featuredArticles.map((article, idx) => {
+            return(
+              <li key={`article_${idx}`}>
+                  <p className="font-semibold text-lg capitalize underline">
+                    <Link href={`/articles/${article.slug}`}>
+                      {article.title}
+                    </Link>
+                  </p>
+                  <p className="opacity-60">
+                    {article.author} - <Date dateString={article.publish_date}/>
+                  </p>
+                  <p>{article.description}</p>
+              </li>
+            )
+          })}
         </ul>
       </Layout>
     </>

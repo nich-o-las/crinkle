@@ -1,6 +1,8 @@
 import { GetStaticProps } from 'next'
-import { getFeatured, getPageData } from '../lib/pages'
-import Layout from '../components/layout'
+import { getFeatured, getPageData } from '../../lib/pages'
+import Date from '../../components/date'
+import Layout from '../../components/layout'
+import Link from 'next/link'
 import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -22,6 +24,7 @@ interface featuredBlogTypes {
   publish_date: string
   description: string
   author: string
+  slug: string
 }
 
 export default function BlogPage(
@@ -39,13 +42,23 @@ export default function BlogPage(
         <meta name="og:title" content={pageProps.title} />
       </Head>
       <Layout location="blog">
-        <h1>{pageProps.title}</h1>
+        <h1 className="font-serif font-bold text-3xl uppercase text-center">{pageProps.title}</h1>
         <div 
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml }} 
         />
         <ul>
-          {featuredBlogs.map((article, idx) => <li key={`article_${idx}`}>{`${article.title} by: ${article.author}`}</li>)}
+          {featuredBlogs.map((blog, idx) => {
+              return(
+                <li key={`blog_${idx}`}>
+                  <p className="font-semibold text-lg capitalize underline">
+                    <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
+                  </p>
+                  <p className="opacity-60">{blog.author} - <Date dateString={blog.publish_date}/></p>
+                  <p>{blog.description}</p>
+                </li>
+              )})
+            }
         </ul>
       </Layout>
     </>
