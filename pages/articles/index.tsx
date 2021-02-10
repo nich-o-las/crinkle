@@ -3,7 +3,10 @@ import { getPageData, getFeatured } from '../../lib/pages'
 import Link from 'next/link'
 import Layout from '../../components/layout'
 import Date from '../../components/date'
+import FeaturedPostCard from '../../components/featuredPostCard'
 import Head from 'next/head'
+import { StringMappingType } from 'typescript'
+import AuthorCard from '../../components/authorCard'
 
 export const getStaticProps: GetStaticProps = async () => {
   const pageProps = await getPageData('article-page')
@@ -25,6 +28,8 @@ interface featuredArticleTypes {
   publish_date: string
   description: string
   author: string
+  imageUrl: string
+  altText: string
 }
 
 export default function ArticlePage(
@@ -51,19 +56,20 @@ export default function ArticlePage(
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml }} 
         />
-        <ul>
+        <ul className="grid sm:grid-cols-2 gap-8">
           {featuredArticles.map((article, idx) => {
             return(
               <li key={`article_${idx}`}>
-                  <p className="font-semibold text-lg capitalize underline">
-                    <Link href={`/articles/${article.slug}`}>
-                      {article.title}
-                    </Link>
-                  </p>
-                  <p className="opacity-60">
-                    {article.author} - <Date dateString={article.publish_date}/>
-                  </p>
-                  <p>{article.description}</p>
+                  <FeaturedPostCard 
+                    route='articles'
+                    title={article.title}
+                    description={article.description}
+                    author={article.author}
+                    authorSlug={article.slug}
+                    imageUrl={article.imageUrl}
+                    altText={article.altText}
+                    date={article.publish_date}
+                  />
               </li>
             )
           })}

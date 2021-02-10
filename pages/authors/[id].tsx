@@ -34,11 +34,13 @@ export default function SingleAuthor({pageProps}: {pageProps: singleBlogPropType
         <title>{pageProps.name}</title>
         <meta name="description" content={pageProps.description} />
       </Head>
-      <h1 className="font-bold font-serif capitalize text-2xl text-center md:mb-2">{pageProps.name}</h1>
+      <h1 className="font-bold font-serif capitalize text-2xl text-center md:mb-2">
+        <span className="opacity-60">Crinkle Contributor:</span> {pageProps.name}
+      </h1>
       <img
         src={getStrapiMedia(pageProps.image.formats.medium.url)}
         alt={pageProps.image.altText}
-        className="md:float-left md:w-1/2 h-auto mr-4 mb-4 rounded-lg"
+        className="sm:float-left md:w-1/3 sm:w-1/2 rounded-lg w-full h-auto mr-4 mb-4 border-purple-400 border-8 shadow"
       />
       <div
         className="unreset pb-8"

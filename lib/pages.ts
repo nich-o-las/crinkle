@@ -1,4 +1,3 @@
-// import {fetchQuery} from './utils'
 import remark from 'remark'
 import html from 'remark-html'
 import { fetchQuery } from './utils'
@@ -26,7 +25,10 @@ export async function getFeatured(postType: string){
         slug: post.slug,
         publish_date: post.publish_date, 
         description: post.description,
-        author: post.author.name
+        author: post.author.name,
+        authorSlug: post.author.slug,
+        imageUrl: (post.image ? post.image.formats.thumbnail.url : ''),
+        altText: (post.image ? post.image.alternativeText : '')
       }
   })
   return sortedData

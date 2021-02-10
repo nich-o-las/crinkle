@@ -1,8 +1,7 @@
 import { GetStaticProps } from 'next'
 import { getFeatured, getPageData } from '../../lib/pages'
-import Date from '../../components/date'
 import Layout from '../../components/layout'
-import Link from 'next/link'
+import FeaturedPostCard from '../../components/featuredPostCard'
 import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -21,10 +20,12 @@ interface pagePropTypes {
 
 interface featuredBlogTypes {
   title: string
+  slug: string
   publish_date: string
   description: string
   author: string
-  slug: string
+  imageUrl: string
+  altText: string
 }
 
 export default function BlogPage(
@@ -47,16 +48,21 @@ export default function BlogPage(
           className="unreset"
           dangerouslySetInnerHTML={{ __html: pageProps.contentHtml }} 
         />
-        <ul>
+        <ul className="grid sm:grid-cols-2 gap-8">
           {featuredBlogs.map((blog, idx) => {
               return(
                 <li key={`blog_${idx}`}>
-                  <p className="font-semibold text-lg capitalize underline">
-                    <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
-                  </p>
-                  <p className="opacity-60">{blog.author} - <Date dateString={blog.publish_date}/></p>
-                  <p>{blog.description}</p>
-                </li>
+                  <FeaturedPostCard 
+                    route='blog'
+                    title={blog.title}
+                    description={blog.description}
+                    author={blog.author}
+                    authorSlug={blog.slug}
+                    imageUrl={blog.imageUrl}
+                    altText={blog.altText}
+                    date={blog.publish_date}
+                  />
+              </li>
               )})
             }
         </ul>
